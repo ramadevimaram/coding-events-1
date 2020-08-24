@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
-/**
- * Created by Chris Bay
- */
 @Controller
 @RequestMapping("events")
 public class EventController {
@@ -28,19 +25,21 @@ public class EventController {
 
     @GetMapping
     public String displayEvents(@RequestParam(required = false) Integer categoryId, Model model) {
-        if(categoryId == null) {
+
+        if (categoryId == null) {
             model.addAttribute("title", "All Events");
             model.addAttribute("events", eventRepository.findAll());
-        }else{
+        } else {
             Optional<EventCategory> result = eventCategoryRepository.findById(categoryId);
-            if(result.isEmpty()){
-                model.addAttribute("title","Invalid Category ID: "+categoryId);
-            }else {
+            if (result.isEmpty()) {
+                model.addAttribute("title", "Invalid Category ID: " + categoryId);
+            } else {
                 EventCategory category = result.get();
-                model.addAttribute("title","Events in category: "+category.getName());
-                model.addAttribute("events",category.getEvents());
+                model.addAttribute("title", "Events in category: " + category.getName());
+                model.addAttribute("events", category.getEvents());
             }
         }
+
         return "events/index";
     }
 
@@ -48,7 +47,6 @@ public class EventController {
     public String displayCreateEventForm(Model model) {
         model.addAttribute("title", "Create Event");
         model.addAttribute(new Event());
-       // model.addAttribute("types", EventType.values());
         model.addAttribute("categories", eventCategoryRepository.findAll());
         return "events/create";
     }
@@ -83,6 +81,7 @@ public class EventController {
 
         return "redirect:";
     }
+
     @GetMapping("detail")
     public String displayEventDetails(@RequestParam Integer eventId, Model model) {
 
@@ -98,6 +97,5 @@ public class EventController {
 
         return "events/detail";
     }
-
 
 }

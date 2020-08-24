@@ -1,17 +1,12 @@
 package org.launchcode.codingevents.models;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-/**
- * Created by Chris Bay
- */
+import java.util.ArrayList;
+import java.util.List;
 @Entity
 public class Event extends AbstractEntity {
 
@@ -28,13 +23,15 @@ public class Event extends AbstractEntity {
     @NotNull(message = "Category is required")
     private EventCategory eventCategory;
 
+    @ManyToMany
+    private final List<Tag> tags = new ArrayList<>();
+
     public Event(String name, EventCategory eventCategory) {
         this.name = name;
         this.eventCategory = eventCategory;
     }
 
-    public Event() {
-    }
+    public Event() {}
 
     public String getName() {
         return name;
@@ -48,6 +45,10 @@ public class Event extends AbstractEntity {
         return eventCategory;
     }
 
+    public void setEventCategory(EventCategory eventCategory) {
+        this.eventCategory = eventCategory;
+    }
+
     public EventDetails getEventDetails() {
         return eventDetails;
     }
@@ -56,11 +57,13 @@ public class Event extends AbstractEntity {
         this.eventDetails = eventDetails;
     }
 
-    public void setEventCategory(EventCategory eventCategory) {
-        this.eventCategory = eventCategory;
+    public List<Tag> getTags() {
+        return tags;
     }
 
-
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
 
     @Override
     public String toString() {
